@@ -95,7 +95,7 @@
       </div>
       <div class="matrix-legend"><span class="legend-dot yes"></span> JGA recommended <span class="legend-dot no"></span> Not recommended <span class="small-meta">Product order: ChatGPT · Gemini · Perplexity · Claude</span></div>
       <div id="question-index" class="question-list" aria-live="polite"></div>
-      <div style="margin-top:25px">${btn("How outcomes were classified","#/methodology")}</div>
+      <div style="margin-top:25px">${btn("Open complete response reader","#/full-evidence")}</div><div style="margin-top:12px"><a class="back-link" href="#/methodology">How outcomes were classified ↗</a></div>
     </section>`;
 }
   function questionCards(rows){
@@ -119,6 +119,13 @@
       <article class="surface">${k("What to verify")}<h2>Go beyond the recommendation flag</h2><p>Review the original response, the recruiter shortlist, the dates, the observed platform mode, citations and any unresolved capture notes before inferring a cause.</p>${btn("See source-ranking context","#/sources")}</article>
     </div><aside class="stack"><div class="surface"><div class="side-stat"><strong>${sum}<span style="font-size:26px;color:#71907b"> / 4</span></strong><span>AI products provisionally recommending JGA for this exact wording</span></div><div style="margin-top:17px">${pill(s?.region||"UK")}${pill("Second pass pending","warn")}</div></div><div class="surface"><h3>Hiring situation</h3><p>${escape(s?.summary||"")}</p><a class="back-link" href="#/situations/${s?.id||"S01"}">View entire situation ↗</a></div></aside></div>
   </section>`;
+}
+    function fullEvidence(){
+  return titleHero("05 / Original answer library","The complete answer, <span class='serif'>not a screenshot of a chart.</span>","Load the separately supplied first-pass evidence JSON to read all 176 exact original model answers, their source records and recorded collection conditions in the interactive website.")
+  + `<section class="section tight"><div class="detail-grid"><div class="stack">
+  <div class="surface"><div class="chapter-head"><div>${k("Private local import")}<h2>Open the original research</h2></div>${pill("Runs in your browser","good")}</div><p>Choose <strong>JGA-Full-First-Pass-Evidence-2026-10-20.json</strong> from the evidence handover ZIP. The website reads the file locally into your browser; it is not uploaded to a server.</p><label class="evidence-upload-label" for="evidence-file">Choose evidence JSON <span aria-hidden="true">↑</span></label><input id="evidence-file" type="file" accept=".json,application/json" aria-describedby="evidence-import-status"><p id="evidence-import-status" class="small-meta" role="status">No evidence file loaded. The 44-question comparison remains available without importing.</p></div>
+  <div class="surface"><h2>Search imported responses</h2><div class="filter-line"><input type="search" id="response-search" class="search-input" aria-label="Search full original answer text" placeholder="Search original answers and prompts…" disabled><select id="response-tool" class="filter-select" aria-label="Filter original response by product" disabled><option value="all">All products</option>${D.tools.map(t=>`<option>${t.id}</option>`).join("")}</select><select id="response-outcome" class="filter-select" aria-label="Filter original response by JGA recommendation" disabled><option value="all">All JGA outcomes</option><option value="yes">JGA recommended</option><option value="no">JGA not recommended</option></select></div><div id="response-count" class="small-meta" aria-live="polite"></div><div id="response-index" class="response-index"><div class="empty-panel"><h3>Evidence ready to load</h3><p>Import the JSON archive above to inspect original full-text answers, recommendations and captured citation links.</p></div></div></div>
+  </div><aside class="stack"><div class="surface"><h3>What the imported file contains</h3><ul class="list-clean"><li>44 exact original buyer questions</li><li>176 selected first-pass responses</li><li>Full untruncated response text</li><li>Dates, platform, conditions and modes</li><li>Recorded recommended recruiter names</li><li>Observed supporting-citation URLs</li><li>Original answer SHA-256 hashes</li></ul></div><div class="surface">${k("Status")}<p>Original source text is preserved, but classifications and cited-claim support still require independent review. The second pass is not included.</p>${btn("Browse the question matrix","#/evidence")}</div></aside></div><div style="height:24px"></div><article id="response-detail" class="surface" hidden><div class="eyebrow" id="response-meta"></div><h2 id="response-title">Original response</h2><p id="response-prompt" class="question-prompt"></p><div id="response-providers" class="small-meta"></div><h3>Complete recorded answer</h3><pre id="response-text" class="raw-answer"></pre><h3>Recorded supporting citations</h3><div id="response-sources" class="source-list"></div><p id="response-review" class="small-meta"></p></article></section>`;
 }
     function actions(){
     return titleHero("06 / Prioritised actions","What JGA should <span class='serif'>look at next.</span>","Practical research-led opportunities, arranged by the commercial relevance of the gaps and strengths observed so far. Explanations are hypotheses until further verified.")
@@ -163,6 +170,61 @@
       [input,region,outcome].forEach(element=>element.addEventListener(element===input?"input":"change",renderQuestions));
       renderQuestions();
     }
+
+    if(path==="full-evidence"){
+      const input=document.getElementById("evidence-file"),status=document.getElementById("evidence-import-status"),search=document.getElementById("response-search"),tool=document.getElementById("response-tool"),outcome=document.getElementById("response-outcome"),index=document.getElementById("response-index"),count=document.getElementById("response-count");
+      let records=[];
+      const safe=(value)=>escape(value);
+      const renderRecord=record=>{
+        const button=document.createElement("button");button.type="button";button.className="response-row";
+        const t=document.createElement("strong");t.textContent=record.questionId+" · "+record.tool;
+        const sub=document.createElement("span");sub.textContent=(record.jgaRecommended?"JGA recommended":"JGA not recommended")+" · "+(record.runTimestamp||"Date not recorded")+" · "+(record.recommendedProviders||[]).slice(0,3).join(", ");
+        const arr=document.createElement("span");arr.textContent="↗";arr.setAttribute("aria-hidden","true");
+        button.append(t,sub,arr);button.addEventListener("click",()=>openRecord(record));return button;
+      };
+      const openRecord=record=>{
+        const panel=document.getElementById("response-detail");panel.hidden=false;
+        document.getElementById("response-title").textContent=record.questionId+" · "+record.tool;
+        document.getElementById("response-meta").textContent=[record.runTimestamp,record.networkCountry,record.authentication,record.mode].filter(Boolean).join(" · ");
+        document.getElementById("response-prompt").textContent=record.prompt||"";
+        document.getElementById("response-providers").textContent="Recorded provider shortlist: "+(record.recommendedProviders||[]).join(" · ");
+        document.getElementById("response-text").textContent=record.fullResponse||"";
+        document.getElementById("response-review").textContent="Original response ID: "+record.responseId+" · Source capture: "+record.sourceCaptureStatus+" · Review: "+record.reviewStatus;
+        const urls=document.getElementById("response-sources");urls.replaceChildren();
+        (record.sources||[]).forEach(source=>{
+          const item=document.createElement("div");item.className="source-item";
+          const link=document.createElement("a");
+          const u=String(source.url||"");
+          if(/^https?:\/\//i.test(u)){link.href=u;link.target="_blank";link.rel="noopener noreferrer";}
+          link.textContent=source.title||u||"Source URL not recorded";
+          const meta=document.createElement("small");meta.textContent=source.verification||"Unreviewed";
+          item.append(link,meta);urls.append(item);
+        });
+        if(!record.sources?.length)urls.textContent="No native supporting-citation URLs recorded for this response.";
+        panel.scrollIntoView({behavior:"smooth",block:"start"});
+      };
+      const draw=()=>{
+        const q=search.value.trim().toLowerCase(),t=tool.value,oc=outcome.value;
+        const list=records.filter(r=>(t==="all"||r.tool===t)&&(oc==="all"||(oc==="yes")===Boolean(r.jgaRecommended))&&(!q||[r.questionId,r.prompt,r.fullResponse,(r.recommendedProviders||[]).join(" ")].some(x=>String(x||"").toLowerCase().includes(q))));
+        count.textContent=list.length+" of "+records.length+" original selected responses";
+        index.replaceChildren(...list.map(renderRecord));
+      };
+      input.addEventListener("change",async()=>{
+        const file=input.files?.[0];if(!file)return;
+        status.textContent="Reading and validating the file…";
+        try{
+          const data=JSON.parse(await file.text());
+          if(!Array.isArray(data.records)||data.records.length!==176||data.records.some(r=>!r.questionId||!r.tool||typeof r.fullResponse!=="string"||!r.responseId))throw Error("The selected first-pass evidence file format or response count is invalid.");
+          const unique=new Set(data.records.map(r=>r.questionId+"|"+r.tool));
+          if(unique.size!==176)throw Error("Duplicate question/product records found.");
+          records=data.records;
+          [search,tool,outcome].forEach(e=>e.disabled=false);
+          status.textContent="Loaded "+records.length+" original first-pass responses locally. The file has not been sent to a server.";
+          document.getElementById("response-detail").hidden=true;draw();
+        }catch(e){records=[];status.textContent="Could not load evidence: "+e.message;index.innerHTML='<div class="empty-panel"><h3>Import unsuccessful</h3><p>Please select the unmodified JSON file from the evidence handover.</p></div>';count.textContent="";}
+      });
+      [search,tool,outcome].forEach(e=>e.addEventListener(e===search?"input":"change",draw));
+    }
     if(path==="sources"){const tabs=[...document.querySelectorAll("[data-tool]")],out=document.getElementById("sources-chart");const paint=(tool)=>{out.innerHTML=sourceChart(tool);tabs.forEach(b=>{b.classList.toggle("active",b.dataset.tool===tool);b.setAttribute("aria-selected",String(b.dataset.tool===tool))})};tabs.forEach(b=>b.addEventListener("click",()=>paint(b.dataset.tool)));paint("ChatGPT");}
     document.querySelectorAll("[data-export]").forEach(b=>b.addEventListener("click",()=>download(b.dataset.export)));
   }
@@ -177,6 +239,7 @@
     else if(path==="sources")html=sources();
     else if(path==="evidence"&&item){const q=(window.JGA_QUESTION_BANK||[]).find(x=>x[0]===item);html=q?questionDetail(q):evidence();}
     else if(path==="evidence")html=evidence();
+    else if(path==="full-evidence")html=fullEvidence();
     else if(path==="actions")html=actions();
     else if(path==="methodology")html=methodology();
     else if(path==="downloads")html=downloads();

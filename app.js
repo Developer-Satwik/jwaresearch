@@ -14,7 +14,7 @@
   const titleHero = (eyebrow,title,summary) => `<section class="page-hero"><div class="page-hero-inner">${k(eyebrow)}<h1>${title}</h1><p>${escape(summary)}</p><div class="hero-utility">${pill("Round 1 / provisional","warn")}${pill("Research collected 18–20 Oct 2026")}</div></div></section>`;
   function setActive() {
     const active = routeBase();
-    document.querySelectorAll("[data-nav]").forEach(a=>{const current=a.dataset.nav===active;a.classList.toggle("active",current);if(current)a.setAttribute("aria-current","page");else a.removeAttribute("aria-current");});
+    document.querySelectorAll("[data-nav]").forEach(a=>{const current=a.dataset.nav===active||(active==="blueprint"&&a.dataset.nav==="actions");a.classList.toggle("active",current);if(current)a.setAttribute("aria-current","page");else a.removeAttribute("aria-current");});
     const toggle=document.getElementById("mobile-toggle"),mobile=document.getElementById("mobile-nav");
     toggle.setAttribute("aria-expanded","false");mobile.hidden=true;
   }

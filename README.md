@@ -29,3 +29,24 @@ Original research archive supplied by the project owner, latest internal working
 3. Source-rank reconciliation; six editorial competitor dossiers; evidence-selected page blueprint.
 4. Complete versioned exports (PDF/CSV/JSON) and second-pass import.
 5. QA and access control before any production client delivery.
+
+
+## Phase 2 — original question and response explorer
+
+Implemented:
+- All 44 exact question texts from the locked v4 bank.
+- One observed JGA recommendation flag for each question × ChatGPT/Gemini/Perplexity/Claude (176 flags; tool totals 36/31/22/20).
+- Search and filters by question, situation and recommendation pattern.
+- Dedicated question detail pages, plus deep links from each of the 11 buyer situation analyses.
+- Exact-question CSV export.
+- A browser-local full-evidence reader at `#/full-evidence`, accepting `JGA-Full-First-Pass-Evidence-2026-10-20.json` from the generated evidence handover. The file is read in the browser; this version does not upload it to Vercel, persist it, or publish it to GitHub. It shows complete full-text response, record conditions and recorded supporting-citation URLs after local import.
+
+Verified directly from the source archive:
+- 44 unique exact questions, 176 distinct selected question/product pairs.
+- 109 provisional JGA recommendations, decomposed 36 ChatGPT, 31 Gemini, 22 Perplexity, 20 Claude.
+- 171 complete, 3 partial, 1 pending and 1 none-present recorded source captures.
+- Full original response texts match stored SHA-256 digests.
+
+Not yet complete: permanent hosted transcript/screenshot storage and reviewed permissions, independently validated recommendation/citation coding, full per-tool ranked source-ledger tables, six finished comparator dossiers, final selected-page rewrite, Round 2 and final PDF package.
+
+The companion evidence export is delivered separately to the project owner; the public repository deliberately does not bundle internal collection files.

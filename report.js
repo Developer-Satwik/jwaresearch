@@ -6,7 +6,7 @@
  const mini=(v,n)=>'<span class="report-percent-bar"><i style="width:'+percent(v,n)+'"></i></span>';
  const line=(id,title,subtitle)=>'<header class="report-heading"><span class="report-kicker">'+esc(id)+'</span><h2>'+title+'</h2><p>'+esc(subtitle)+'</p></header>';
  function tab(headers,rows,label){
-  return '<div class="report-table-wrap" role="region" tabindex="0" aria-label="'+esc(label)+'"><table><caption>'+esc(label)+'</caption><thead><tr>'+headers.map(v=>'<th scope="col">'+esc(v)+'</th>').join("")+'</tr></thead><tbody>'+rows.map(row=>'<tr>'+row.map((v,i)=>(i===0?'<th scope="row">':'<td>')+v+(i===0?'</th>':'</td>')).join("")+'</tr>').join("")+'</tbody></table></div>';
+  return '<div class="report-table-container"><p class="report-scroll-hint">Swipe sideways to view the full comparison <span aria-hidden="true">↔</span></p><div class="report-table-wrap" role="region" tabindex="0" aria-label="'+esc(label)+'"><table><caption>'+esc(label)+'</caption><thead><tr>'+headers.map(v=>'<th scope="col">'+esc(v)+'</th>').join("")+'</tr></thead><tbody>'+rows.map(row=>'<tr>'+row.map((v,i)=>(i===0?'<th scope="row">':'<td>')+v+(i===0?'</th>':'</td>')).join("")+'</tr>').join("")+'</tbody></table></div></div>';
  }
  function render(){
  const tools=tab(["Tool","JGA recommended","Frequency","Comparison"],D.tools.map(t=>[esc(t.id),t.count+"/44",percent(t.count,44),mini(t.count,44)]),"First-pass platform results");

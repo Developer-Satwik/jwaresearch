@@ -148,7 +148,7 @@
       const paint=()=>{let q=input.value.toLowerCase().trim();let rows=D.situations.filter(s=>(region.value==="all"||region.value===s.region)&&(!q||(`${s.name} ${s.summary} ${s.id} ${s.type}`).toLowerCase().includes(q)));if(sort.value==="low")rows.sort((a,b)=>a.hits-b.hits);if(sort.value==="high")rows.sort((a,b)=>b.hits-a.hits);out.innerHTML=rows.length?situationCards(rows):`<div class="empty-panel"><h3>No matching situations</h3><p>Try a different role or regional filter.</p></div>`};
       [input,region,sort].forEach(e=>e.addEventListener(e===input?"input":"change",paint));paint();
     }
-    if(path==="evidence"&&!window.location.hash.replace(/^#\\/?/,"").split("/")[1]){
+    if(path==="evidence"&&!window.location.hash.split("/")[2]){
       const input=document.getElementById("question-search"),region=document.getElementById("question-situation"),outcome=document.getElementById("question-outcome"),list=document.getElementById("question-index");
       const renderQuestions=()=>{
         const q=input.value.toLowerCase().trim();

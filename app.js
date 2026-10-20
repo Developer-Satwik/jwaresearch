@@ -78,10 +78,49 @@
     const rows=D.sources[tool]||[];return `<div class="chart-heading"><div><h3>${escape(tool)} — leading cited domains</h3><p>Number of selected first-pass responses citing each domain at least once. This ranking counts supporting citations, not recommendations.</p></div><span class="mini-key">Cited responses</span></div><div class="bars">${rows.map(([domain,n])=>bar(domain,n,44)).join("")}</div><p class="chart-foot">Top ${rows.length} recorded domains; 44 selected answers for this AI product. Source-level audit and complete ranked export remain pending.</p>`;
   }
   function evidence(){
-    return titleHero("05 / Evidence register","Inspect the proof, <span class='serif'>not just the conclusion.</span>","The original study captures dated responses, prompts, collection conditions, screenshots and URL-level source records. The client-safe evidence explorer is the next implementation phase.")
-    + `<section class="section tight"><div class="metric-grid">${metric("Selected first pass","176","question × tool combinations")}${metric("Question variants","44","11 situations × 4")}${metric("Supporting sources","In review","citation reconciliation")}${metric("Second pass","0 / 176","not yet included",true)}</div><div style="height:30px"></div><div class="detail-grid"><div class="surface"><h2>What's being prepared</h2><p>The research archive contains full response texts and original screenshots, but the current publication does not yet include those files. We won't fabricate transcript previews or imply that omitted screenshots are available.</p><ul class="list-clean"><li>All 44 exact source questions, unchanged</li><li>176 selected original response texts, dates and platform conditions</li><li>Recommendation vs mention vs source-only classification</li><li>Exact citation URLs and source-event roles</li><li>Verified screenshots/exports and audit notes</li></ul></div><div class="surface"><h3>Evidence principles</h3><p>Each published finding must trace to stable question, run, response and source IDs. Pilot duplicates stay in the archive but are not counted twice. Missing source support is labelled, not filled in.</p>${btn("Read the methodology","#/methodology")}</div></div></section>`;
-  }
-  function actions(){
+  return titleHero("05 / Original questions","44 questions. <span class='serif'>176 first-pass checks.</span>","Search the exact employer wording and compare whether each AI product recommended JGA. The full original answers and source-event records are available in the separate evidence handover.")
+  + `<section class="section tight">
+      <div class="metric-grid">
+        ${metric("Exact question texts","44","unaltered locked question bank")}
+        ${metric("Selected first-pass checks","176","44 questions × 4 AI products")}
+        ${metric("JGA recommendations","109","provisional classification")}
+        ${metric("Second-pass records","0 / 176","not yet collected",true)}
+      </div>
+      <div style="height:27px"></div>
+      ${note("The matrix below contains the exact 44 prompt texts and one recorded, provisionally classified result per AI product. It does not substitute for the full original answer transcript. The separate offline evidence archive includes full texts and recorded supporting citations.")}
+      <div class="filter-line">
+        <input id="question-search" class="search-input" type="search" aria-label="Search exact questions" placeholder="Search exact question wording…">
+        <select id="question-situation" class="filter-select" aria-label="Filter by situation"><option value="all">All 11 situations</option>${D.situations.map(s=>`<option value="${s.id}">${s.id} · ${escape(s.name)}</option>`).join("")}</select>
+        <select id="question-outcome" class="filter-select" aria-label="Filter JGA outcomes"><option value="all">All outcomes</option><option value="recommended">Recommended in any tool</option><option value="absent">Not recommended in any tool</option><option value="mixed">Mixed across tools</option></select>
+      </div>
+      <div class="matrix-legend"><span class="legend-dot yes"></span> JGA recommended <span class="legend-dot no"></span> Not recommended <span class="small-meta">Product order: ChatGPT · Gemini · Perplexity · Claude</span></div>
+      <div id="question-index" class="question-list" aria-live="polite"></div>
+      <div style="margin-top:25px">${btn("How outcomes were classified","#/methodology")}</div>
+    </section>`;
+}
+  function questionCards(rows){
+  return rows.map(q=>{
+    const id=q[0], bits=q[1], prompt=q[2], sum=[...bits].filter(x=>x==="1").length;
+    return `<a class="question-card" href="#/evidence/${id}">
+       <div class="question-head"><span class="eyebrow">${escape(id)} / ${id.startsWith("S03")?"US":"UK"} · First pass</span><span class="question-count">${sum}/4 products recommend JGA <span aria-hidden="true">↗</span></span></div>
+       <p class="question-prompt">${escape(prompt)}</p>
+       <div class="question-flags" aria-label="JGA recommendation by product">${JGA_TOOL_ORDER.map((tool,i)=>`<span class="question-flag ${bits[i]==="1"?"recommended":"not-recommended"}"><span aria-hidden="true">${bits[i]==="1"?"✓":"–"}</span> ${escape(tool)}</span>`).join("")}</div>
+    </a>`;
+  }).join("");
+}
+  function questionDetail(q){
+  const [id,bits,prompt]=q, s=D.situations.find(s=>s.id===id.slice(0,3));
+  const sum=[...bits].filter(x=>x==="1").length;
+  return `<div class="page-top"><a class="back-link" href="#/evidence">← All exact questions</a></div>${titleHero(`${escape(id)} / First-pass prompt`,`${escape(s?.name||"Buyer question")}`,`Exact buyer question ${id}. Compare the four platform-level provisional JGA outcomes.`)}
+  <section class="section tight">
+    <div class="detail-grid"><div class="stack">
+      <article class="surface">${k("Exact prompt / unchanged")}<h2 class="question-detail-title">${escape(prompt)}</h2><div class="question-flags">${JGA_TOOL_ORDER.map((tool,i)=>`<span class="question-flag ${bits[i]==="1"?"recommended":"not-recommended"}">${escape(tool)}: ${bits[i]==="1"?"JGA recommended":"JGA not recommended"}</span>`).join("")}</div></article>
+      <article class="surface"><h2>What the four results show</h2><p>JGA was recommended by ${sum} of the four AI products for this exact question in the selected first pass.</p><div class="stack">${JGA_TOOL_ORDER.map((tool,i)=>`<div class="question-result"><div><span class="eyebrow">${escape(tool)} · Round 1</span><h3>${bits[i]==="1"?"JGA included in recommendation":"JGA not included in recommendation"}</h3></div><span class="tag ${bits[i]==="1"?"":"attention"}">${bits[i]==="1"?"Recommended":"Not recommended"}</span></div>`).join("")}</div><p class="small-meta" style="margin-top:15px">These indicators are derived from the archived working classifications. They do not describe all firms named in each answer. The full answer texts and citation events remain in the separately generated original evidence archive.</p></article>
+      <article class="surface">${k("What to verify")}<h2>Go beyond the recommendation flag</h2><p>Review the original response, the recruiter shortlist, the dates, the observed platform mode, citations and any unresolved capture notes before inferring a cause.</p>${btn("See source-ranking context","#/sources")}</article>
+    </div><aside class="stack"><div class="surface"><div class="side-stat"><strong>${sum}<span style="font-size:26px;color:#71907b"> / 4</span></strong><span>AI products provisionally recommending JGA for this exact wording</span></div><div style="margin-top:17px">${pill(s?.region||"UK")}${pill("Second pass pending","warn")}</div></div><div class="surface"><h3>Hiring situation</h3><p>${escape(s?.summary||"")}</p><a class="back-link" href="#/situations/${s?.id||"S01"}">View entire situation ↗</a></div></aside></div>
+  </section>`;
+}
+    function actions(){
     return titleHero("06 / Prioritised actions","What JGA should <span class='serif'>look at next.</span>","Practical research-led opportunities, arranged by the commercial relevance of the gaps and strengths observed so far. Explanations are hypotheses until further verified.")
     + `<section class="section tight"><div class="chapter-head"><div>${k("Priorities / first pass")}<p class="body-text">A proposed investigation roadmap. Page edits or content changes cannot guarantee particular AI recommendations.</p></div>${pill("Blueprint page not finalised","warn")}</div>${D.actions.map(a=>`<article class="action-card"><div class="action-number">${String(a.rank).padStart(2,"0")}</div><div><div class="action-tags"><span class="tag ${a.rank<=3?"attention":""}">${escape(a.category)}</span><span class="tag light">Effort: ${escape(a.effort)}</span><span class="tag light">${escape(a.evidence)}</span></div><h3>${escape(a.title)}</h3><p>${escape(a.body)}</p><div style="display:flex;gap:14px;flex-wrap:wrap">${a.ids.map(id=>`<a class="back-link" href="#/situations/${id}">See ${id} evidence ↗</a>`).join("")}</div></div></article>`).join("")}<div style="margin-top:28px">${note("This is an interim action roadmap, not the complete drafted improvements for the evidence-selected JGA page. The final blueprint will include copy, technical changes, internal linking and an implementation checklist after source review.")}</div></section>`;
   }
@@ -92,12 +131,13 @@
   }
   function downloads(){
     return titleHero("07 / Research handover","Take the findings <span class='serif'>with you.</span>","Export provisional structured summaries now. The complete dated raw-response package, source ledger, six detailed competitor reviews and final PDF blueprint will be added when independently reviewed.")
-    + `<section class="section tight"><div class="items-grid"><div class="item-card"><div class="card-head">${k("Structured / CSV")}<span>↧</span></div><h3>Hiring situations</h3><p>11 situations, JGA counts, region and study interpretations.</p><button type="button" class="section-cta" data-export="situations">Download CSV <span class="cta-arrow" aria-hidden="true">↓</span></button></div><div class="item-card"><div class="card-head">${k("Structured / CSV")}<span>↧</span></div><h3>Source rankings</h3><p>Top recorded domains by tool, with unique response counts.</p><button type="button" class="section-cta" data-export="sources">Download CSV <span class="cta-arrow" aria-hidden="true">↓</span></button></div><div class="item-card"><div class="card-head">${k("Structured / JSON")}<span>↧</span></div><h3>Provisional data</h3><p>First-pass aggregates and interpretation notes for offline review.</p><button type="button" class="section-cta" data-export="data">Download JSON <span class="cta-arrow" aria-hidden="true">↓</span></button></div></div><div style="height:25px"></div><div class="surface"><h2>Still being assembled for final client delivery</h2><p>The executive PDF, full 44-question bank, all original dated responses and screenshots, source-level CSV, complete six-competitor dossiers, and implementation-ready page blueprint are outstanding. They are not presented here as completed downloads.</p><p>${pill("Raw response archive · pending")}${pill("Full source ledger · pending")}${pill("Executive PDF · pending")}${pill("JGA page blueprint · pending")}</p></div></section>`;
+    + `<section class="section tight"><div class="items-grid"><div class="item-card"><div class="card-head">${k("Structured / CSV")}<span>↧</span></div><h3>Hiring situations</h3><p>11 situations, JGA counts, region and study interpretations.</p><button type="button" class="section-cta" data-export="situations">Download CSV <span class="cta-arrow" aria-hidden="true">↓</span></button></div><div class="item-card"><div class="card-head">${k("Structured / CSV")}<span>↧</span></div><h3>Source rankings</h3><p>Top recorded domains by tool, with unique response counts.</p><button type="button" class="section-cta" data-export="sources">Download CSV <span class="cta-arrow" aria-hidden="true">↓</span></button></div><div class="item-card"><div class="card-head">${k("Structured / JSON")}<span>↧</span></div><h3>Provisional data</h3><p>First-pass aggregates and interpretation notes for offline review.</p><button type="button" class="section-cta" data-export="data">Download JSON <span class="cta-arrow" aria-hidden="true">↓</span></button></div></div><div style="height:25px"></div><div class="surface"><h2>Exact question bank and observed outcomes</h2><p>All 44 unaltered buyer questions with the provisional JGA recommendation flag for each of the four products.</p><button type="button" class="section-cta" data-export="questions">Download 44-question CSV <span class="cta-arrow" aria-hidden="true">↓</span></button></div><div style="height:25px"></div><div class="surface"><h2>Still being assembled for final client delivery</h2><p>The executive PDF, full 44-question bank, all original dated responses and screenshots, source-level CSV, complete six-competitor dossiers, and implementation-ready page blueprint are outstanding. They are not presented here as completed downloads.</p><p>${pill("Raw response archive · pending")}${pill("Full source ledger · pending")}${pill("Executive PDF · pending")}${pill("JGA page blueprint · pending")}</p></div></section>`;
   }
   const csv=(rows)=>rows.map(row=>row.map(v=>'"'+String(v??"").replace(/"/g,'""')+'"').join(",")).join("\r\n")+"\r\n";
   function download(kind){
     let content,name,type;
     if(kind==="data"){content=JSON.stringify(D,null,2);name="jga-first-pass-provisional.json";type="application/json"}
+    else if(kind==="questions"){const rows=[["Question ID","Exact buyer question","Collection region","ChatGPT JGA recommended","Gemini JGA recommended","Perplexity JGA recommended","Claude JGA recommended"]];(window.JGA_QUESTION_BANK||[]).forEach(([id,bits,prompt])=>rows.push([id,prompt,id.startsWith("S03")?"US":"UK",...[...bits].map(x=>x==="1"?"yes":"no")]));content=csv(rows);name="jga-exact-questions-first-pass.csv";type="text/csv"}
     else if(kind==="sources"){let rows=[["AI tool","Source domain","Responses citing domain","Tool responses","Status"]];Object.entries(D.sources).forEach(([tool,sources])=>sources.forEach(([domain,n])=>rows.push([tool,domain,n,44,"provisional"] )));content=csv(rows);name="jga-leading-source-domains-provisional.csv";type="text/csv"}
     else {let rows=[["Situation ID","Hiring situation","Collection region","JGA recommendations","Selected responses","Description","Status"]];D.situations.forEach(s=>rows.push([s.id,s.name,s.region,s.hits,16,s.summary,"provisional"]));content=csv(rows);name="jga-buyer-situations-provisional.csv";type="text/csv"}
     const blob=new Blob([content],{type:type+";charset=utf-8"}),url=URL.createObjectURL(blob),anchor=document.createElement("a");anchor.href=url;anchor.download=name;document.body.appendChild(anchor);anchor.click();anchor.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);
@@ -107,6 +147,21 @@
       const input=document.getElementById("situation-search"),region=document.getElementById("region-filter"),sort=document.getElementById("sort-filter"),out=document.getElementById("situation-cards");
       const paint=()=>{let q=input.value.toLowerCase().trim();let rows=D.situations.filter(s=>(region.value==="all"||region.value===s.region)&&(!q||(`${s.name} ${s.summary} ${s.id} ${s.type}`).toLowerCase().includes(q)));if(sort.value==="low")rows.sort((a,b)=>a.hits-b.hits);if(sort.value==="high")rows.sort((a,b)=>b.hits-a.hits);out.innerHTML=rows.length?situationCards(rows):`<div class="empty-panel"><h3>No matching situations</h3><p>Try a different role or regional filter.</p></div>`};
       [input,region,sort].forEach(e=>e.addEventListener(e===input?"input":"change",paint));paint();
+    }
+    if(path==="evidence"&&!window.location.hash.replace(/^#\\/?/,"").split("/")[1]){
+      const input=document.getElementById("question-search"),region=document.getElementById("question-situation"),outcome=document.getElementById("question-outcome"),list=document.getElementById("question-index");
+      const renderQuestions=()=>{
+        const q=input.value.toLowerCase().trim();
+        const filtered=(window.JGA_QUESTION_BANK||[]).filter(rec=>{
+          const [id,bits,prompt]=rec,sum=[...bits].filter(x=>x==="1").length;
+          return (region.value==="all"||id.startsWith(region.value)) &&
+            (!q||(`${id} ${prompt}`).toLowerCase().includes(q)) &&
+            (outcome.value==="all"||(outcome.value==="recommended"&&sum>0)||(outcome.value==="absent"&&sum===0)||(outcome.value==="mixed"&&sum>0&&sum<4));
+        });
+        list.innerHTML=filtered.length?questionCards(filtered):'<div class="empty-panel"><h3>No matching questions</h3><p>Try another query or filter.</p></div>';
+      };
+      [input,region,outcome].forEach(element=>element.addEventListener(element===input?"input":"change",renderQuestions));
+      renderQuestions();
     }
     if(path==="sources"){const tabs=[...document.querySelectorAll("[data-tool]")],out=document.getElementById("sources-chart");const paint=(tool)=>{out.innerHTML=sourceChart(tool);tabs.forEach(b=>{b.classList.toggle("active",b.dataset.tool===tool);b.setAttribute("aria-selected",String(b.dataset.tool===tool))})};tabs.forEach(b=>b.addEventListener("click",()=>paint(b.dataset.tool)));paint("ChatGPT");}
     document.querySelectorAll("[data-export]").forEach(b=>b.addEventListener("click",()=>download(b.dataset.export)));
@@ -120,6 +175,7 @@
     else if(path==="competitors"&&item){let c=D.competitors.find(c=>c.id===item);html=c?competitorDetail(c):competitors();}
     else if(path==="competitors")html=competitors();
     else if(path==="sources")html=sources();
+    else if(path==="evidence"&&item){const q=(window.JGA_QUESTION_BANK||[]).find(x=>x[0]===item);html=q?questionDetail(q):evidence();}
     else if(path==="evidence")html=evidence();
     else if(path==="actions")html=actions();
     else if(path==="methodology")html=methodology();

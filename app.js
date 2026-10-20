@@ -172,6 +172,60 @@
     else {let rows=[["Situation ID","Hiring situation","Collection region","JGA recommendations","Selected responses","Description","Status"]];D.situations.forEach(s=>rows.push([s.id,s.name,s.region,s.hits,16,s.summary,"provisional"]));content=csv(rows);name="jga-buyer-situations-provisional.csv";type="text/csv"}
     const blob=new Blob([content],{type:type+";charset=utf-8"}),url=URL.createObjectURL(blob),anchor=document.createElement("a");anchor.href=url;anchor.download=name;document.body.appendChild(anchor);anchor.click();anchor.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);
   }
+  function initSourceLedger(){
+    const input=document.getElementById("source-ledger-file");
+    if(!input)return;
+    const status=document.getElementById("source-ledger-status"),workspace=document.getElementById("source-ledger-ui"),search=document.getElementById("source-ledger-search"),tool=document.getElementById("source-ledger-tool"),body=document.getElementById("source-ledger-results"),counter=document.getElementById("source-ledger-count"),limit=document.getElementById("source-ledger-limit");
+    let rows=[];
+    function matching(){
+      const q=search.value.toLowerCase().trim();
+      return rows.filter(r=>(tool.value==="all"||r.tool===tool.value)&&(!q||[r.url,r.title,r.question,r.domain].some(v=>v.toLowerCase().includes(q))));
+    }
+    function renderRows(){
+      const matches=matching();
+      counter.textContent=matches.length+" recorded source URLs · "+new Set(matches.map(r=>r.response)).size+" distinct AI responses";
+      body.replaceChildren();
+      matches.slice(0,100).forEach(r=>{
+        const tr=document.createElement("tr"),td=document.createElement("td"),who=document.createElement("td"),review=document.createElement("td");
+        const anchor=document.createElement("a");anchor.textContent=r.title||r.domain;anchor.href=r.url;anchor.target="_blank";anchor.rel="noopener noreferrer";
+        const url=document.createElement("small");url.textContent=r.url;url.className="source-url-small";td.append(anchor,url);
+        const detail=document.createElement("a");detail.href="#/evidence/"+r.question;detail.textContent=r.question+" · "+r.tool;who.append(detail);
+        review.textContent=r.verified;
+        tr.append(td,who,review);body.append(tr);
+      });
+      limit.textContent=matches.length>100?"Showing the first 100 matching citations for performance. Export CSV for the full selection.":"Showing all matching citations.";
+    }
+    function load(records){
+      const found=[];
+      for(const rec of records)for(const src of rec.sources||[]){
+        const u=String(src.url||"");
+        if(!/^https?:\/\//i.test(u))continue;
+        let domain="";try{domain=new URL(u).hostname.toLowerCase().replace(/^www\./,"")}catch{continue}
+        found.push({url:u,title:String(src.title||""),domain,question:String(rec.questionId),tool:String(rec.tool),response:String(rec.responseId),verified:String(src.verification||"not_reviewed"),event:String(src.sourceEventId||"")});
+      }
+      rows=found;window.JGA_LOADED_EVIDENCE=records;workspace.hidden=false;
+      status.textContent=records.length+" original responses and "+rows.length+" recorded source URLs loaded locally.";
+      renderRows();
+    }
+    input.addEventListener("change",async()=>{
+      const file=input.files?.[0];if(!file)return;
+      status.textContent="Validating the evidence file…";
+      try{
+        const data=JSON.parse(await file.text()),records=data.records;
+        if(!Array.isArray(records)||records.length!==176||records.some(r=>!r.responseId||!Array.isArray(r.sources)))throw Error("Expected the unmodified selected 176-response JSON handover.");
+        if(new Set(records.map(r=>r.questionId+"|"+r.tool)).size!==176)throw Error("Duplicate question/product pairs.");
+        load(records);
+      }catch(e){status.textContent="Could not load: "+e.message;}
+    });
+    search.addEventListener("input",renderRows);tool.addEventListener("change",renderRows);
+    document.getElementById("source-ledger-download").addEventListener("click",()=>{
+      const heads=["Source domain","Exact URL","Page title","AI tool","Question ID","Response ID","Source event","Verification"];
+      const csv=[heads,...matching().map(r=>[r.domain,r.url,r.title,r.tool,r.question,r.response,r.event,r.verified])].map(a=>a.map(v=>'"'+String(v??"").replace(/"/g,'""')+'"').join(",")).join("\r\n")+"\r\n";
+      const link=document.createElement("a"),url=URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8"}));
+      link.href=url;link.download="jga-source-events-first-pass.csv";document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);
+    });
+    if(window.JGA_LOADED_EVIDENCE)load(window.JGA_LOADED_EVIDENCE);
+  }
   function afterRender(path){
     if(path==="situations"){
       const input=document.getElementById("situation-search"),region=document.getElementById("region-filter"),sort=document.getElementById("sort-filter"),out=document.getElementById("situation-cards");
@@ -240,7 +294,7 @@
           if(!Array.isArray(data.records)||data.records.length!==176||data.records.some(r=>!r.questionId||!r.tool||typeof r.fullResponse!=="string"||!r.responseId))throw Error("The selected first-pass evidence file format or response count is invalid.");
           const unique=new Set(data.records.map(r=>r.questionId+"|"+r.tool));
           if(unique.size!==176)throw Error("Duplicate question/product records found.");
-          records=data.records;
+          records=data.records;window.JGA_LOADED_EVIDENCE=records;
           [search,tool,outcome].forEach(e=>e.disabled=false);
           status.textContent="Loaded "+records.length+" original first-pass responses locally. The file has not been sent to a server.";
           document.getElementById("response-detail").hidden=true;draw();
@@ -248,7 +302,7 @@
       });
       [search,tool,outcome].forEach(e=>e.addEventListener(e===search?"input":"change",draw));
     }
-    if(path==="sources"){const tabs=[...document.querySelectorAll("[data-tool]")],out=document.getElementById("sources-chart");const paint=(tool)=>{out.innerHTML=sourceChart(tool);tabs.forEach(b=>{b.classList.toggle("active",b.dataset.tool===tool);b.setAttribute("aria-selected",String(b.dataset.tool===tool))})};tabs.forEach(b=>b.addEventListener("click",()=>paint(b.dataset.tool)));paint("ChatGPT");}
+    if(path==="sources"){const tabs=[...document.querySelectorAll("[data-tool]")],out=document.getElementById("sources-chart");const paint=(tool)=>{out.innerHTML=sourceChart(tool);tabs.forEach(b=>{b.classList.toggle("active",b.dataset.tool===tool);b.setAttribute("aria-selected",String(b.dataset.tool===tool))})};tabs.forEach(b=>b.addEventListener("click",()=>paint(b.dataset.tool)));paint("ChatGPT");initSourceLedger();}
     document.querySelectorAll("[data-export]").forEach(b=>b.addEventListener("click",()=>download(b.dataset.export)));
   }
   function render(){

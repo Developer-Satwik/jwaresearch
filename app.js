@@ -139,7 +139,7 @@
     <div class="detail-grid"><div class="stack">
       <article class="surface">${k("Exact prompt / unchanged")}<h2 class="question-detail-title">${escape(prompt)}</h2><div class="question-flags">${JGA_TOOL_ORDER.map((tool,i)=>`<span class="question-flag ${bits[i]==="1"?"recommended":"not-recommended"}">${escape(tool)}: ${bits[i]==="1"?"JGA recommended":"JGA not recommended"}</span>`).join("")}</div></article>
       <article class="surface"><h2>What the four results show</h2><p>JGA was recommended by ${sum} of the four AI products for this exact question in the selected first pass.</p><div class="stack">${JGA_TOOL_ORDER.map((tool,i)=>`<div class="question-result"><div><span class="eyebrow">${escape(tool)} · Round 1</span><h3>${bits[i]==="1"?"JGA included in recommendation":"JGA not included in recommendation"}</h3></div><span class="tag ${bits[i]==="1"?"":"attention"}">${bits[i]==="1"?"Recommended":"Not recommended"}</span></div>`).join("")}</div><p class="small-meta" style="margin-top:15px">These indicators are derived from the archived working classifications. They do not describe all firms named in each answer. The full answer texts and citation events remain in the separately generated original evidence archive.</p></article>
-      <article class="surface">${k("What to verify")}<h2>Go beyond the recommendation flag</h2><p>Review the original response, the recruiter shortlist, the dates, the observed platform mode, citations and any unresolved capture notes before inferring a cause.</p>${btn("See source-ranking context","#/sources")}</article>
+      <article class="surface">${k("What to verify")}<h2>Go beyond the recommendation flag</h2><p>Review the original response, the recruiter shortlist, the dates, the observed platform mode, citations and any unresolved capture notes before inferring a cause.</p>${btn("Open full responses for this question","#/full-evidence/${id}")}<div class="evidence-next-step"><span class="small-meta">Requires the original evidence JSON handover for full transcripts and citations.</span><a href="#/sources" class="back-link">Compare cited sources ↗</a></div></article>
     </div><aside class="stack"><div class="surface"><div class="side-stat"><strong>${sum}<span style="font-size:26px;color:#71907b"> / 4</span></strong><span>AI products provisionally recommending JGA for this exact wording</span></div><div style="margin-top:17px">${pill(s?.region||"UK")}${pill("Second pass pending","warn")}</div></div><div class="surface"><h3>Hiring situation</h3><p>${escape(s?.summary||"")}</p><a class="back-link" href="#/situations/${s?.id||"S01"}">View entire situation ↗</a></div></aside></div>
   </section>`;
 }
@@ -252,7 +252,9 @@
 
     if(path==="full-evidence"){
       const input=document.getElementById("evidence-file"),status=document.getElementById("evidence-import-status"),search=document.getElementById("response-search"),tool=document.getElementById("response-tool"),outcome=document.getElementById("response-outcome"),index=document.getElementById("response-index"),count=document.getElementById("response-count");
-      let records=[];
+      let records=Array.isArray(window.JGA_LOADED_EVIDENCE)?window.JGA_LOADED_EVIDENCE:[];
+      const requestedQuestion=(window.location.hash.split("/")[2]||"");
+      if(requestedQuestion){search.value=requestedQuestion;status.textContent="Showing original response records for "+requestedQuestion+" once the evidence file is loaded.";}
       const safe=(value)=>escape(value);
       const renderRecord=record=>{
         const button=document.createElement("button");button.type="button";button.className="response-row";
@@ -303,6 +305,7 @@
         }catch(e){records=[];status.textContent="Could not load evidence: "+e.message;index.innerHTML='<div class="empty-panel"><h3>Import unsuccessful</h3><p>Please select the unmodified JSON file from the evidence handover.</p></div>';count.textContent="";}
       });
       [search,tool,outcome].forEach(e=>e.addEventListener(e===search?"input":"change",draw));
+      if(records.length===176){[search,tool,outcome].forEach(e=>e.disabled=false);status.textContent="Loaded "+records.length+" original responses from this browser session.";draw();}
     }
     if(path==="sources"){const tabs=[...document.querySelectorAll("[data-tool]")],out=document.getElementById("sources-chart");const paint=(tool)=>{out.innerHTML=sourceChart(tool);tabs.forEach(b=>{b.classList.toggle("active",b.dataset.tool===tool);b.setAttribute("aria-selected",String(b.dataset.tool===tool))})};tabs.forEach(b=>b.addEventListener("click",()=>paint(b.dataset.tool)));paint("ChatGPT");initSourceLedger();}
     document.querySelectorAll("[data-export]").forEach(b=>b.addEventListener("click",()=>download(b.dataset.export)));
@@ -325,7 +328,7 @@
     else if(path==="methodology")html=methodology();
     else if(path==="downloads")html=downloads();
     else html=titleHero("Not found","We couldn't find that page.","Choose an area from the navigation above.")+`<section class="section tight">${btn("Return to overview","#/overview")}</section>`;
-    root.innerHTML=html;document.title=(path==="overview"?"The AI Recommendation Landscape":path[0].toUpperCase()+path.slice(1).replace("-"," "))+" — JGA Intelligence";
+    root.innerHTML=html;root.setAttribute("aria-label",path==="overview"?"JGA Intelligence overview":path.replaceAll("-"," ")+" research page");document.title=(path==="overview"?"The AI Recommendation Landscape":path[0].toUpperCase()+path.slice(1).replace("-"," "))+" — JGA Intelligence";
     setActive();afterRender(path);if(path==="blueprint")window.JGA_BLUEPRINT.init();if(path==="report")window.JGA_REPORT.init(); if(window.location.hash&&!window.location.hash.includes("#findings"))window.scrollTo({top:0,behavior:"instant"});
     document.querySelectorAll(".table-scroll,.report-table-wrap").forEach((box,i)=>{
       if(!box.hasAttribute("tabindex"))box.tabIndex=0;
@@ -348,7 +351,7 @@
   }
   window.addEventListener("scroll",()=>{if(!progressFrame)progressFrame=requestAnimationFrame(()=>{progressFrame=0;updateReadingProgress()})},{passive:true});
   window.addEventListener("resize",updateReadingProgress);
-  window.addEventListener("hashchange",render);
+  window.addEventListener("hashchange",()=>{render();root.focus({preventScroll:true});});
   document.getElementById("mobile-toggle").addEventListener("click",()=>{const nav=document.getElementById("mobile-nav"),button=document.getElementById("mobile-toggle");nav.hidden=!nav.hidden;button.setAttribute("aria-expanded",String(!nav.hidden));button.setAttribute("aria-label",nav.hidden?"Open navigation":"Close navigation");});
   document.getElementById("mobile-nav").addEventListener("click",e=>{if(e.target.closest("a"))document.getElementById("mobile-nav").hidden=true;});
   document.addEventListener("keydown",event=>{

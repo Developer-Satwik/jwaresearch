@@ -37,3 +37,18 @@ main{min-height:66vh}.section{max-width:1500px;margin:auto;padding:clamp(64px,8v
 .question-result{border-top:1px solid var(--border);padding:19px 0;display:flex;align-items:center;justify-content:space-between;gap:20px}
 .question-result h3{font-size:17px;font-weight:600;letter-spacing:-.025em;margin:6px 0 0}
 @media(max-width:600px){.question-card{padding:19px}.question-head{align-items:start;flex-direction:column;gap:7px}.question-count{white-space:normal}.question-prompt{font-size:15px}.question-result{align-items:start;flex-direction:column;gap:7px}}
+
+/* Browser-local full original answer reader */
+.evidence-upload-label{display:inline-flex;align-items:center;gap:18px;background:var(--dark);color:white;border-radius:100px;padding:13px 19px;font-size:14px;font-weight:700;cursor:pointer;margin:12px 0 5px;min-height:46px}
+.evidence-upload-label:hover{background:#305b47}
+#evidence-file{display:block;width:100%;max-width:400px;margin:10px 0;font-size:13px;accent-color:var(--green)}
+#evidence-file::file-selector-button{border:1px solid var(--border);background:#eaf1e9;border-radius:8px;padding:8px 13px;margin-right:11px;cursor:pointer}
+.response-index{max-height:610px;overflow:auto;display:flex;flex-direction:column;gap:7px;padding-right:4px}
+.response-row{background:#fafcf9;border:1px solid var(--border);border-radius:11px;display:grid;grid-template-columns:1fr auto;gap:3px 12px;text-align:left;padding:14px 17px;width:100%;align-items:center;color:var(--ink);transition:background .15s}
+.response-row:hover{background:#eaf3e9}
+.response-row strong{font-size:14px}
+.response-row span:nth-child(2){font-size:12px;color:var(--muted);grid-row:2;grid-column:1}
+.response-row span:last-child{grid-column:2;grid-row:1 / span 2;font-size:20px;color:var(--green)}
+.raw-answer{white-space:pre-wrap;overflow-wrap:anywhere;word-break:normal;background:#f5f7f4;border:1px solid #e0e7de;border-radius:13px;padding:23px;max-height:680px;overflow:auto;font-family:var(--font);font-size:14px;line-height:1.8}
+#response-detail{scroll-margin-top:30px}
+@media(max-width:600px){.response-index{max-height:500px}.raw-answer{padding:16px;font-size:13px}}

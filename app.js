@@ -51,7 +51,7 @@
   }
   function situations() {
     return titleHero("02 / Buyer-situation analysis","What happens when employers <span class='serif'>ask for a recruiter?</span>","Eleven real-world hiring decisions—from routine UK replacements to global leadership and a US domestic appointment.")
-      + `<section class="section tight"><div class="filter-line"><input id="situation-search" class="search-input" type="search" placeholder="Search hiring situations" aria-label="Search hiring situations"><select id="region-filter" class="filter-select" aria-label="Filter by country"><option value="all">All regions</option><option value="UK">UK scenarios</option><option value="US">US scenarios</option></select><select id="sort-filter" class="filter-select" aria-label="Sort situations"><option value="order">Study order</option><option value="low">Fewest recommendations first</option><option value="high">Most recommendations first</option></select></div><div id="situation-cards" class="items-grid"></div><div style="margin-top:24px">${note("Each card shows recommendations among 16 selected first-pass responses. Regional controls reflect recorded collection conditions, not identical model interpretation.")}</div></section>`;
+      + `<section class="section tight"><div class="filter-line"><input id="situation-search" class="search-input" type="search" placeholder="Search hiring situations" aria-label="Search hiring situations"><select id="region-filter" class="filter-select" aria-label="Filter by country"><option value="all">All regions</option><option value="UK">UK scenarios</option><option value="US">US scenarios</option></select><select id="sort-filter" class="filter-select" aria-label="Sort situations"><option value="order">Study order</option><option value="low">Fewest recommendations first</option><option value="high">Most recommendations first</option></select></div><div class="filter-feedback"><span id="situation-summary" role="status" aria-live="polite">Showing 11 situations</span><button type="button" id="situation-clear" class="filter-reset" hidden>Clear filters ↺</button></div><div id="situation-cards" class="items-grid"></div><div style="margin-top:24px">${note("Each card shows recommendations among 16 selected first-pass responses. Regional controls reflect recorded collection conditions, not identical model interpretation.")}</div></section>`;
   }
   function situationCards(rows){
     return rows.map(s=>`<a class="item-card" href="#/situations/${s.id}"><div class="card-head"><span class="eyebrow">${s.id} / ${escape(s.region)}</span><span class="tag ${s.hits<8?"attention":""}">${s.hits<8?"Lower frequency":s.hits>=13?"Strong observed":"Mixed"}</span></div><h3>${escape(s.name)}</h3><p>${escape(s.summary)}</p><div class="card-bottom"><span class="big-number">${s.hits}<small>/16</small></span><span aria-hidden="true" style="font-size:23px">↗</span></div></a>`).join("");
@@ -115,7 +115,7 @@
         <input id="question-search" class="search-input" type="search" aria-label="Search exact questions" placeholder="Search exact question wording…">
         <select id="question-situation" class="filter-select" aria-label="Filter by situation"><option value="all">All 11 situations</option>${D.situations.map(s=>`<option value="${s.id}">${s.id} · ${escape(s.name)}</option>`).join("")}</select>
         <select id="question-outcome" class="filter-select" aria-label="Filter JGA outcomes"><option value="all">All outcomes</option><option value="recommended">Recommended in any tool</option><option value="absent">Not recommended in any tool</option><option value="mixed">Mixed across tools</option></select>
-      </div>
+      </div><div class="filter-feedback"><span id="question-summary" role="status" aria-live="polite">Showing 44 questions</span><button type="button" id="question-clear" class="filter-reset" hidden>Clear filters ↺</button></div>
       <div class="matrix-legend"><span class="legend-dot yes"></span> JGA recommended <span class="legend-dot no"></span> Not recommended <span class="small-meta">Product order: ChatGPT · Gemini · Perplexity · Claude</span></div>
       <div id="question-index" class="question-list" aria-live="polite"></div>
       <div style="margin-top:25px">${btn("Open complete response reader","#/full-evidence")}</div><div style="margin-top:12px"><a class="back-link" href="#/methodology">How outcomes were classified ↗</a></div>
@@ -227,13 +227,13 @@
     if(window.JGA_LOADED_EVIDENCE)load(window.JGA_LOADED_EVIDENCE);
   }
   function afterRender(path){
-    if(path==="situations"){
-      const input=document.getElementById("situation-search"),region=document.getElementById("region-filter"),sort=document.getElementById("sort-filter"),out=document.getElementById("situation-cards");
-      const paint=()=>{let q=input.value.toLowerCase().trim();let rows=D.situations.filter(s=>(region.value==="all"||region.value===s.region)&&(!q||(`${s.name} ${s.summary} ${s.id} ${s.type}`).toLowerCase().includes(q)));if(sort.value==="low")rows.sort((a,b)=>a.hits-b.hits);if(sort.value==="high")rows.sort((a,b)=>b.hits-a.hits);out.innerHTML=rows.length?situationCards(rows):`<div class="empty-panel"><h3>No matching situations</h3><p>Try a different role or regional filter.</p></div>`};
-      [input,region,sort].forEach(e=>e.addEventListener(e===input?"input":"change",paint));paint();
+    if(path==="situations"&&!window.location.hash.split("/")[2]){
+      const input=document.getElementById("situation-search"),region=document.getElementById("region-filter"),sort=document.getElementById("sort-filter"),out=document.getElementById("situation-cards"),count=document.getElementById("situation-summary"),reset=document.getElementById("situation-clear");
+      const paint=()=>{let q=input.value.toLowerCase().trim();let rows=D.situations.filter(s=>(region.value==="all"||region.value===s.region)&&(!q||(`${s.name} ${s.summary} ${s.id} ${s.type}`).toLowerCase().includes(q)));if(sort.value==="low")rows.sort((a,b)=>a.hits-b.hits);if(sort.value==="high")rows.sort((a,b)=>b.hits-a.hits);out.innerHTML=rows.length?situationCards(rows):`<div class="empty-panel"><h3>No matching situations</h3><p>Try a different role or regional filter.</p></div>`;count.textContent="Showing "+rows.length+" of "+D.situations.length+" situations";reset.hidden=!(q||region.value!=="all"||sort.value!=="order")};
+      [input,region,sort].forEach(e=>e.addEventListener(e===input?"input":"change",paint));reset.addEventListener("click",()=>{input.value="";region.value="all";sort.value="order";paint();input.focus();});paint();
     }
     if(path==="evidence"&&!window.location.hash.split("/")[2]){
-      const input=document.getElementById("question-search"),region=document.getElementById("question-situation"),outcome=document.getElementById("question-outcome"),list=document.getElementById("question-index");
+      const input=document.getElementById("question-search"),region=document.getElementById("question-situation"),outcome=document.getElementById("question-outcome"),list=document.getElementById("question-index"),count=document.getElementById("question-summary"),reset=document.getElementById("question-clear");
       const renderQuestions=()=>{
         const q=input.value.toLowerCase().trim();
         const filtered=(window.JGA_QUESTION_BANK||[]).filter(rec=>{
@@ -243,8 +243,10 @@
             (outcome.value==="all"||(outcome.value==="recommended"&&sum>0)||(outcome.value==="absent"&&sum===0)||(outcome.value==="mixed"&&sum>0&&sum<4));
         });
         list.innerHTML=filtered.length?questionCards(filtered):'<div class="empty-panel"><h3>No matching questions</h3><p>Try another query or filter.</p></div>';
+        count.textContent="Showing "+filtered.length+" of "+window.JGA_QUESTION_BANK.length+" questions";reset.hidden=!(q||region.value!=="all"||outcome.value!=="all");
       };
       [input,region,outcome].forEach(element=>element.addEventListener(element===input?"input":"change",renderQuestions));
+      reset.addEventListener("click",()=>{input.value="";region.value="all";outcome.value="all";renderQuestions();input.focus();});
       renderQuestions();
     }
 

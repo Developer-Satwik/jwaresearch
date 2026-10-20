@@ -121,3 +121,14 @@
  .report-footer,.report-primary-link{display:none!important}
  a{color:#214e34!important;text-decoration:none!important}
 }
+
+/* Helpful, nonintrusive cue that tables retain additional columns on narrow screens. */
+.report-table-container{min-width:0}
+.report-scroll-hint{display:none;margin:0 0 9px;font-size:12px;font-weight:700;color:#507259}
+.report-scroll-hint span{font-size:18px;padding-left:5px}
+@media(max-width:700px){
+  .report-scroll-hint{display:block}
+  .report-table-wrap{box-shadow:inset -16px 0 18px -18px rgba(24,51,33,.28)}
+  .report-table-wrap:focus-visible{outline:3px solid #b56a3f;outline-offset:3px}
+}
+@media print{.report-scroll-hint{display:none!important}}

@@ -128,6 +128,7 @@
     root.innerHTML=html;document.title=(path==="overview"?"The AI Recommendation Landscape":path[0].toUpperCase()+path.slice(1).replace("-"," "))+" — JGA Intelligence";
     setActive();afterRender(path); if(window.location.hash&&!window.location.hash.includes("#findings"))window.scrollTo({top:0,behavior:"instant"});
   }
+  document.addEventListener("click", event => { const jump=event.target.closest('a[href="#findings"]'); if(jump){event.preventDefault();document.getElementById("findings")?.scrollIntoView({behavior:"smooth"});} });
   window.addEventListener("hashchange",render);
   document.getElementById("mobile-toggle").addEventListener("click",()=>{const nav=document.getElementById("mobile-nav"),button=document.getElementById("mobile-toggle");nav.hidden=!nav.hidden;button.setAttribute("aria-expanded",String(!nav.hidden));button.setAttribute("aria-label",nav.hidden?"Open navigation":"Close navigation");});
   document.getElementById("mobile-nav").addEventListener("click",e=>{if(e.target.closest("a"))document.getElementById("mobile-nav").hidden=true;});

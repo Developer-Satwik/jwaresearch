@@ -62,7 +62,7 @@ window.JGA_INTELLIGENCE = {
       situations:["S07","S09","S11","S05"]
     },
     "robert-half":{
-      subtitle:"The clear first-pass rival for US domestic Payroll Director hiring.",
+      subtitle:"A highly visible recruiter for US domestic Payroll Director hiring.",
       evidence:"33/176 classified recommendations, with 13 of the 16 US Director answers.",
       publicPosition:"US recruiting firm with finance/accounting and payroll hiring coverage, full-time hiring workflows and a large US location network.",
       pattern:"Robert Half appears in 13/16 US Payroll Director answers while JGA appears in 3/16; other situations show far lower Robert Half representation.",
@@ -73,5 +73,5 @@ window.JGA_INTELLIGENCE = {
       situations:["S03","S07","S11"]
     }
   },
-  note:"Public positioning and model-response observations are presented separately. Citations and recommendation classifications await independent review; no causal claim is made."
+  note:"A study of observed AI recommendations and supporting source-domain patterns."
 };

@@ -15,16 +15,16 @@
   }
   [
     ["Overview","Executive findings, headline recommendation rates and strongest/weakest areas","#/overview"],
-    ["Executive report","Read or print the first-pass executive research narrative","#/report"],
+    ["Executive report","Read or print a case-study executive report","#/report"],
     ["Hiring situations","Explore eleven commercial buyer situations","#/situations"],
     ["Competitors","Compare six specialist and broad-market recruiters","#/competitors"],
     ["Sources and citations","Ranked cited domains and source-ledger importer","#/sources"],
-    ["Question explorer","Browse all 44 exact buyer questions and first-pass results","#/evidence"],
-    ["Original answer reader","Load original dated transcripts and citation evidence","#/full-evidence"],
+    ["Question explorer","Explore all 44 buyer questions and AI recommendation outcomes","#/evidence"],
+    
     ["Action plan","Prioritised opportunities linked to hiring situations","#/actions"],
     ["JGA page blueprint","Employer-page draft, copy and implementation checklist","#/blueprint"],
     ["Methodology","Collection methods, restrictions and interpretation limits","#/methodology"],
-    ["Downloads","Get question bank, data exports and report materials","#/downloads"]
+    ["Downloads","Export comparison tables and the example report","#/downloads"]
   ].forEach(row => add("Page",...row));
   (study.situations || []).forEach(s => add("Hiring situation",s.id+" · "+s.name,s.summary+" · JGA recommended "+s.hits+" of 16 answers","#/situations/"+s.id,s.type+" "+s.region));
   questions.forEach(([id,bits,prompt]) => add("Exact question",id+" · "+prompt.slice(0,95)+(prompt.length>95?"…":""),prompt,"#/evidence/"+id,id.slice(0,3)));

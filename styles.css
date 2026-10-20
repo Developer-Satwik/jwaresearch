@@ -17,3 +17,23 @@ main{min-height:66vh}.section{max-width:1500px;margin:auto;padding:clamp(64px,8v
 @media(max-width:950px){.desktop-nav,.header-download{display:none}.mobile-toggle{display:flex}.mobile-nav:not([hidden]){display:flex;flex-direction:column;gap:0;position:absolute;top:78px;right:16px;left:16px;background:#fff;z-index:60;border:1px solid var(--border);border-radius:18px;padding:12px;box-shadow:0 20px 40px rgba(13,33,23,.15)}.mobile-nav a{font-size:15px;text-decoration:none;padding:13px 14px;border-radius:9px}.mobile-nav a:hover{background:#f1f4ef}.split-heading,.detail-grid{grid-template-columns:1fr}.metric-grid,.items-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.statements{grid-template-columns:1fr 1fr}.hero-inner{min-height:575px}.hero h1{font-size:clamp(54px,10vw,100px)}.heatrow{grid-template-columns:35px minmax(130px,1fr) minmax(100px,1.5fr) 40px;gap:8px}.heatname{font-size:12px}}
 @media(max-width:600px){.site-header{height:69px;padding:0 19px}.mobile-nav:not([hidden]){top:69px}.hero{margin:0 9px;border-radius:19px;min-height:600px}.hero-inner{min-height:600px;padding:32px 25px}.hero h1{font-size:clamp(54px,13.4vw,78px);letter-spacing:-.08em}.hero-sub{font-size:16px}.hero-label{font-size:10px}.hero-issue{font-size:10px}.hero-bottom{align-items:start;flex-direction:column}.hero-note{text-align:left}.section{padding:65px 20px}.metric-grid,.items-grid,.findings,.statements,.two-columns{grid-template-columns:1fr}.metric{min-height:145px}.finding{min-height:230px!important}.finding.featured{grid-row:auto}.chapter-head{flex-direction:column}.page-hero{margin:0 9px;border-radius:18px;padding:45px 24px}.page-hero h1{font-size:clamp(43px,12vw,65px)}.bar-row{grid-template-columns:84px 1fr 48px;gap:8px}.bar-label{font-size:12px}.bar-value{font-size:12px}.heatrow{grid-template-columns:34px minmax(102px,1fr) minmax(80px,1.2fr) 32px;gap:6px;padding:5px 0}.heatname{font-size:10px;line-height:1.2}.heatcells{gap:2px}.heatcells i{height:21px}.heatvalue{font-size:11px}.chart-box,.surface{padding:20px;border-radius:16px}.chart-heading{flex-direction:column}.action-card{grid-template-columns:36px 1fr;gap:13px}.footer-top{padding-top:64px;padding-bottom:70px;flex-direction:column;align-items:start}.footer-title{font-size:clamp(50px,12vw,74px)}.footer-bottom{flex-direction:column}.filter-select,.search-input{width:100%;max-width:none}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+
+/* Research question explorer */
+.question-list{display:flex;flex-direction:column;gap:10px}
+.question-card{display:block;text-decoration:none;background:#fff;border:1px solid var(--border);border-radius:18px;padding:24px;transition:background .18s,transform .18s}
+.question-card:hover{background:#f0f6ef;transform:translateY(-1px)}
+.question-head{display:flex;align-items:center;justify-content:space-between;gap:20px}
+.question-count{font-size:12px;color:#50715d;font-weight:700;white-space:nowrap}
+.question-prompt{font-size:16px;line-height:1.65;margin:18px 0;color:#253d31;max-width:1050px}
+.question-flags{display:flex;align-items:center;flex-wrap:wrap;gap:8px}
+.question-flag{display:inline-flex;align-items:center;gap:8px;border-radius:99px;padding:7px 11px;font-size:12px;font-weight:700;border:1px solid transparent}
+.question-flag.recommended{color:#22573a;border-color:#c1dec7;background:#e5f3e9}
+.question-flag.not-recommended{color:#805c42;background:#f5eadd;border-color:#e8d9c9}
+.question-flag span[aria-hidden]{font-size:15px}
+.matrix-legend{display:flex;align-items:center;flex-wrap:wrap;gap:9px;font-size:13px;color:#5e7264;margin:9px 0 22px}
+.legend-dot{width:11px;height:11px;border-radius:3px;display:inline-block}
+.legend-dot.yes{background:#5b8a68}.legend-dot.no{background:#c99a71;margin-left:12px}
+.question-detail-title{font-size:clamp(23px,2.8vw,37px)!important;line-height:1.28!important;max-width:820px;margin:20px 0!important}
+.question-result{border-top:1px solid var(--border);padding:19px 0;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.question-result h3{font-size:17px;font-weight:600;letter-spacing:-.025em;margin:6px 0 0}
+@media(max-width:600px){.question-card{padding:19px}.question-head{align-items:start;flex-direction:column;gap:7px}.question-count{white-space:normal}.question-prompt{font-size:15px}.question-result{align-items:start;flex-direction:column;gap:7px}}

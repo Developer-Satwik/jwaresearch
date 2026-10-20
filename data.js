@@ -1,6 +1,6 @@
 window.JGA_DATA = {
-  version: "Round 1 · 20 October 2026",
-  disclaimer: "Provisional first-pass observations. Not the completed 352-response benchmark. Classifications and supporting source mappings await independent review.",
+  version: "AI Discovery Case Study · October 2026",
+  disclaimer: "Case study of 176 recorded AI answers to employer questions, not a population-wide survey.",
   total: 176, planned: 352, questions: 44,
   tools: [
     {id:"ChatGPT", count:36, total:44},
@@ -53,9 +53,9 @@ window.JGA_DATA = {
   ],
   methodology: {
     intended: "44 exact questions, two independent runs on each of four tools (target 352 responses).",
-    current: "176 distinct selected first-pass responses captured; historical S01-A pilot duplicates excluded. All findings are provisional.",
+    current: "176 recorded responses are included in this case study; one response per question and platform.",
     conditions: "UK network location for ten situations and US network location for S03; ChatGPT guest/signed out, while other tools largely used newly-created signed-in accounts in temporary or incognito modes.",
-    limitations: "Signed-in private modes are not technically identical to logged-out use. Underlying model/routing and supporting-citation capture vary. Original scoring is not yet independently reviewed. Collection location is a tested setup condition, not proof of identical platform interpretation.",
-    sources: "Supporting citations are distinguished from recruiter/contact links and retrieved-only results. Domain rankings count unique selected responses with at least one recorded supporting citation; citation support has not yet been independently verified."
+    limitations: "Platforms used differing session conditions, so their results cannot be interpreted as a controlled head-to-head comparison of model algorithms.",
+    sources: "Supporting citations are different from recommended recruiters. Domain ranks count the number of distinct answers citing each domain."
   }
 };

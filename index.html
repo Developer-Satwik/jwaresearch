@@ -16,6 +16,7 @@
   <link rel="stylesheet" href="interactions.css">
   <link rel="stylesheet" href="report.css">
   <link rel="stylesheet" href="responsive.css">
+  <link rel="stylesheet" href="search.css">
 </head>
 <body>
   <a class="skip-link" href="#content">Skip to content</a>
@@ -31,7 +32,7 @@
         <a data-nav="evidence" href="#/evidence">Evidence</a>
         <a data-nav="actions" href="#/actions">Action plan</a>
       </nav>
-      <div class="header-actions">
+      <div class="header-actions"><button type="button" class="global-search-trigger" data-open-search aria-haspopup="dialog" aria-controls="research-search-dialog"><svg aria-hidden="true" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="10.8" cy="10.8" r="6.7"/><path d="m16 16 5 5"/></svg><span>Search research</span><kbd>⌘ K</kbd></button>
         <a class="header-download" href="#/downloads">Downloads <span aria-hidden="true">↗</span></a>
         <button type="button" id="mobile-toggle" class="mobile-toggle" aria-controls="mobile-nav" aria-expanded="false" aria-label="Open navigation"><span></span><span></span></button>
       </div>
@@ -39,6 +40,21 @@
     <nav id="mobile-nav" class="mobile-nav" aria-label="Mobile navigation" hidden>
       <a href="#/overview">Overview</a><a href="#/situations">Hiring situations</a><a href="#/competitors">Competitors</a><a href="#/sources">Sources</a><a href="#/evidence">Evidence</a><a href="#/actions">Action plan</a><a href="#/downloads">Downloads</a><a href="#/report">Executive report</a><a href="#/methodology">Methodology</a>
     </nav>
+    <dialog id="research-search-dialog" class="research-search-dialog" aria-labelledby="research-search-title">
+      <div class="research-search-shell">
+        <div class="research-search-top">
+          <div><div class="eyebrow">JGA / QUICK FIND</div><h2 id="research-search-title">Find something in the study.</h2></div>
+          <button id="research-search-close" type="button" class="research-search-close" aria-label="Close search">✕</button>
+        </div>
+        <div class="research-search-field">
+          <svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="10.8" cy="10.8" r="6.7"/><path d="m16 16 5 5"/></svg>
+          <input type="search" id="research-search-input" aria-label="Search topics, questions, companies and source domains" placeholder="Try US hiring, Frazer Jones, S03 or payroll transformation…" autocomplete="off" spellcheck="false">
+        </div>
+        <p class="research-search-helper" id="research-search-status" aria-live="polite">Search 11 situations, 44 questions, six competitors, sources, action priorities and report pages.</p>
+        <div id="research-search-results" class="research-search-results" aria-label="Search results"></div>
+        <div class="research-search-foot"><span>↑ ↓ Move between results</span><span>Enter Open</span><span>Esc Close</span></div>
+      </div>
+    </dialog>
     <main id="content" tabindex="-1" aria-live="polite"></main>
     <footer class="site-footer">
       <div class="footer-top"><div class="footer-title">Evidence before assumptions<span class="accent-dot">.</span></div><div class="footer-links"><a href="#/methodology">Methodology</a><a href="#/evidence">Evidence register</a><a href="#/downloads">Downloads</a></div></div>
@@ -51,5 +67,6 @@
   <script src="blueprint.js"></script>
   <script src="report.js"></script>
   <script src="app.js"></script>
+  <script src="search.js"></script>
 </body>
 </html>

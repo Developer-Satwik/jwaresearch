@@ -21,3 +21,16 @@
   .evidence-next-step{flex-direction:column;align-items:start}
 }
 @media(prefers-reduced-motion:reduce){.filter-reset{transition:none}}
+
+/* Adjacent routes reduce repeated backtracking through the research directory. */
+.adjacent-nav{margin-top:29px;border-top:1px solid #d6e2d7;padding-top:26px}
+.adjacent-nav-title{display:flex;justify-content:space-between;align-items:center;gap:15px;font-size:14px;font-weight:700;margin-bottom:15px;color:#315942}
+.adjacent-nav-links{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.adjacent-link,.adjacent-placeholder{min-height:110px;border-radius:17px;border:1px solid #ceddcf;background:#fff;padding:19px 23px;display:flex;flex-direction:column;justify-content:center;gap:8px}
+.adjacent-link{color:#284f36;text-decoration:none;transition:background-color .17s ease,box-shadow .17s ease,transform .17s ease}
+.adjacent-link strong{font-size:16px;line-height:1.3;letter-spacing:-.026em;font-weight:700}
+.adjacent-link .eyebrow{font-size:10px;color:#75917b}
+.adjacent-placeholder{background:transparent;color:#839889;font-size:12px}
+@media(hover:hover) and (pointer:fine){.adjacent-link:hover{background:#e9f2e7;transform:translateY(-2px);box-shadow:var(--elev-quiet)}}
+@media(max-width:570px){.adjacent-nav-links{grid-template-columns:1fr}.adjacent-link,.adjacent-placeholder{min-height:82px;padding:16px 18px}.adjacent-nav-title{font-size:13px}}
+@media(prefers-reduced-motion:reduce){.adjacent-link{transition:none}}

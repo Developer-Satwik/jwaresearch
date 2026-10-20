@@ -1,0 +1,70 @@
+
+/* Intentional interaction system / 2026
+   Interactions are feedback, not hidden information. Static state is complete by default. */
+:root{--motion-quick:150ms;--motion-medium:210ms;--motion-ease:cubic-bezier(.2,.75,.25,1);--focus-ring:#b56a3f}
+.desktop-nav a{position:relative;display:inline-block;padding:10px 1px;transition:color var(--motion-quick) ease}
+.desktop-nav a:after{content:"";position:absolute;left:0;right:0;bottom:5px;height:1.5px;background:#315f46;transform:scaleX(0);transform-origin:left;transition:transform var(--motion-medium) var(--motion-ease);pointer-events:none}
+.desktop-nav a.active:after{transform:scaleX(1)}
+.header-download,.section-cta,.bp-copy-actions button,.bp-secondary-btn{transition:transform var(--motion-quick) var(--motion-ease),background-color var(--motion-quick) ease,box-shadow var(--motion-medium) ease}
+.section-cta .cta-arrow,.header-download span,.hero-scroll .round-arrow{transition:transform var(--motion-medium) var(--motion-ease),background-color var(--motion-medium) ease}
+.back-link{background-image:linear-gradient(currentColor,currentColor);background-repeat:no-repeat;background-position:0 100%;background-size:0 1px;transition:background-size var(--motion-medium) var(--motion-ease);text-decoration:none}
+.finding .arrow-corner,.item-card .card-bottom>span[aria-hidden],.bp-opportunity .bp-arrow{transition:transform var(--motion-medium) var(--motion-ease),color var(--motion-medium) ease}
+.finding .arrow-corner,.bp-arrow{transform-origin:center}
+.finding{transition:transform var(--motion-medium) var(--motion-ease),box-shadow var(--motion-medium) ease,border-color var(--motion-medium) ease}
+.item-card,.bp-opportunity,.question-card{transition:transform var(--motion-medium) var(--motion-ease),background-color var(--motion-medium) ease,box-shadow var(--motion-medium) ease,border-color var(--motion-medium) ease}
+.bp-opportunity{overflow:hidden}
+.bp-opportunity:after{content:"";position:absolute;right:-50px;top:-50px;width:160px;height:160px;background:radial-gradient(circle,rgba(153,194,160,.22),transparent 70%);opacity:0;transition:opacity var(--motion-medium) ease;pointer-events:none}
+.chapter-rail a,.bp-chapters a{transition:background-color var(--motion-quick) ease,border-color var(--motion-quick) ease,color var(--motion-quick) ease,transform var(--motion-quick) var(--motion-ease)}
+.tool-tab{transition:background-color var(--motion-quick) ease,color var(--motion-quick) ease,border-color var(--motion-quick) ease,transform var(--motion-quick) var(--motion-ease)}
+.source-item{transition:background-color var(--motion-quick) ease}
+.data-table tbody tr td{transition:background-color var(--motion-quick) ease}
+.question-flag{transition:none}
+.heatrow{transition:background-color var(--motion-quick) ease}
+.bar-row[href] .bar-fill{transition:filter var(--motion-quick) ease}
+.bp-faq summary{transition:color var(--motion-quick) ease}
+.bp-task{transition:background-color var(--motion-quick) ease}
+.bp-reference-list a{transition:background-color var(--motion-quick) ease,border-color var(--motion-quick) ease,transform var(--motion-quick) var(--motion-ease)}
+/* Underline links in evidence are obvious before hover. */
+.source-item a,.data-table a{ text-decoration-thickness:1px; text-underline-offset:4px }
+@media(hover:hover) and (pointer:fine){
+  .desktop-nav a:hover:after{transform:scaleX(1)}
+  .header-download:hover{background:#306147;box-shadow:0 8px 17px rgba(29,70,44,.16);transform:translateY(-1px)}
+  .header-download:hover span{display:inline-block;transform:translate(2px,-2px)}
+  .section-cta:hover{background:#2a5941;transform:translateY(-1px);box-shadow:0 11px 24px rgba(21,58,35,.17)}
+  .section-cta:hover .cta-arrow{transform:translate(2px,-2px);background:#e2f0e3}
+  .hero-scroll:hover .round-arrow{background:#e0f0e2;transform:translate(2px,2px)}
+  .back-link:hover{background-size:100% 1px;text-decoration:none}
+  .finding:hover{transform:translateY(-3px);border-color:#b2cdb6}
+  .finding:hover .arrow-corner{transform:translate(3px,-3px)}
+  .item-card:hover,.question-card:hover{transform:translateY(-2px);border-color:#bbd0bd}
+  .item-card:hover .card-bottom>span[aria-hidden]{transform:translate(2px,-3px);color:#28633f}
+  .bp-opportunity:hover{transform:translateY(-3px);border-color:#a9c6af;box-shadow:0 20px 44px rgba(30,65,39,.10)}
+  .bp-opportunity:hover:after{opacity:1}
+  .bp-opportunity:hover .bp-arrow{transform:translateX(4px);color:#17452d}
+  .chapter-rail a:hover,.bp-chapters a:hover{background:#e1ece1;border-color:#abc4ad;transform:translateY(-1px);color:#204d35}
+  .tool-tab:hover:not(.active){background:#e8f1e8;border-color:#bad0be}
+  .source-item:hover{background:rgba(234,244,231,.45)}
+  .data-table tbody tr:hover td{background:#f0f7ef}
+  .bar-row[href]:hover .bar-fill{filter:brightness(1.12)}
+  .heatrow:hover{background:#e8f3e7}
+  .bp-copy-actions button:hover,.bp-secondary-btn:hover{transform:translateY(-1px);box-shadow:0 7px 18px rgba(29,68,42,.12)}
+  .bp-faq summary:hover{color:#35754e}
+  .bp-task:hover{background:#f0f6f0}
+  .bp-reference-list a:hover{background:#eaf2ea;border-color:#9bbfa3;transform:translateY(-1px)}
+  .mobile-nav a:hover{background:#e7f0e7}
+}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible,.bp-task:focus-within{outline:3px solid var(--focus-ring);outline-offset:3px;border-radius:4px}
+a:active,.section-cta:active,.header-download:active,button:active{transform:translateY(0) scale(.99)}
+/* Intro motion only: the long-form body and all data remain still. */
+@keyframes jga-intro{from{opacity:.7;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@media(prefers-reduced-motion:no-preference){
+  .hero .hero-main,.page-hero h1{animation:jga-intro 480ms var(--motion-ease) both}
+  .hero .hero-sub,.page-hero p{animation:jga-intro 580ms var(--motion-ease) both}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition-duration:0.01ms!important;scroll-behavior:auto!important}
+  .hero .hero-main,.page-hero h1,.hero .hero-sub,.page-hero p{transform:none!important;opacity:1!important}
+}
+@media(hover:none){
+  .finding,.item-card,.question-card,.bp-opportunity{transform:none!important}
+}

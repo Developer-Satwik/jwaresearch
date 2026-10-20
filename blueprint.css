@@ -6,7 +6,7 @@
 .bp-chapters{display:flex;gap:9px;overflow-x:auto;max-width:1500px;margin:24px auto 0;padding:0 clamp(20px,5.3vw,84px) 8px;scroll-snap-type:x proximity}
 .bp-chapters a{scroll-snap-align:start;white-space:nowrap;font-size:12px;font-weight:700;letter-spacing:.025em;color:#476553;text-decoration:none;background:#fff;border:1px solid #d6e1d4;border-radius:99px;padding:11px 18px;transition:background .18s,border-color .18s}
 .bp-chapters a:focus-visible{outline-offset:4px}
-.bp-pages{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin:38px 0 24px}
+.bp-pages{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:38px 0 24px}
 .bp-page-card{border:1px solid var(--border);background:white;border-radius:22px;box-shadow:var(--elev-quiet);padding:25px;display:flex;flex-direction:column;min-height:275px}
 .bp-page-card:first-child{background:#e1ebe0;border-color:#c5d9c8;box-shadow:var(--elev-medium)}
 .bp-page-card-head{display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:start}

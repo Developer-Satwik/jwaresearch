@@ -82,3 +82,15 @@ Added:
 UX and AEO guidance: W3C WCAG 2.2 hover/focus and focus-visible, Material motion guidance, web.dev animation-performance recommendations, NN/g navigation patterns and Google Search Central AI Features.
 
 Remaining: second research pass, review of classification/citation quality, final client-approved page choice and proof, reviewed competitor reports, full PDF handover, comprehensive browser accessibility/performance QA.
+
+## Phase 5 — responsive system and executive report
+
+- Added first-pass printable executive report at `#/report`, linked from Overview and Downloads, with executive findings, platform/scenario/competitor comparisons, leading source-domain tables, action priorities and methodology caveats. Print or Save as PDF uses the browser print dialog; it is not yet the final two-pass benchmark PDF.
+- Added `responsive.css` after existing styles, including content-led breakpoints for narrow 320–360px screens, larger phones, tablets, laptops, short screens and touch/pointer differences.
+- Fluid headings and responsive card grids, domain text wrapping, compact bar comparisons, narrower heatmap labels, input controls that remain readable at mobile widths, and a fully scrollable table region.
+- Added keyboard-focusable scrollable data tables, Escape-close and resize-state handling for the mobile menu, and reduced-motion-friendly in-page navigation.
+- Added `report.css` with separate A4 print styles and narrow-phone adaptations.
+
+Design and accessibility references: GOV.UK Layout and Type Scale, W3C WCAG 2.2 Reflow and Target Size, MDN Container Queries and Reduced Motion, Nielsen Norman Group Data Tables, The National Archives accessible scrollable tables, and web.dev responsive typography.
+
+Release criterion still open: visually inspect the actual deployed site at representative widths and 400% zoom, keyboard-test complex controls, and check Lighthouse/Core Web Vitals. Source-review and Round 2 remain outstanding.

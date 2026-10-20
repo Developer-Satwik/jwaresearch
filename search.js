@@ -34,7 +34,7 @@
   Object.values(intelligence.sourceRankings || {}).forEach(rows => rows.forEach(([domain])=>{
     if (seen.has(domain)) return;
     seen.add(domain);
-    add("Source domain",domain,"Supporting-citation domain in the collected first-pass responses","#/sources","cited website");
+    add("Source domain",domain,"Supporting website appearing in AI answers","#/sources","cited website");
   }));
   const norm = q => q.toLowerCase().trim().replace(/\s+/g," ");
   function find(query) {

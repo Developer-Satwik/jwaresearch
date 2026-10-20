@@ -67,3 +67,18 @@ Cautions:
 - The source event count is separate from unique-answer domain citation frequency. URLs may repeat or redirect.
 - Public competitor claims are not verified placement-performance outcomes. All attribution, classification, citation verification and explanations remain provisional until independent review.
 - The full study requires the second round, formal comparator editorial review, and final chosen-page blueprint before delivery as completed work.
+
+## Phase 4 — JGA page blueprint and interaction polish
+
+The application now includes the #/blueprint route linked from Action Plan and Downloads. This is an evidence-informed working draft, not a final independently reviewed study outcome.
+
+Added:
+- Provisional candidate /payroll-recruitment/, compared with the homepage, team profiles and public /recruitment-test/ role inventory. Resolve the 100+ vs 150+ experience-figure discrepancy before publication.
+- Four research-linked opportunity areas: UK core hires, confidential search, transformation hiring and separate US Director recruiting.
+- Proposed employer-facing copy, meta title/description, FAQ, internal-link and technical checks, and published JGA contact link.
+- Twelve checkable approval/implementation tasks; local-only progress; clipboard copy; editable HTML, JSON and CSV checklist exports; print/PDF draft mode.
+- Purposeful 150–210ms UI interactions in interactions.css: navigation underline, actionable cards, arrow feedback, table highlights, active/pressed/focus states and reduced-motion support.
+
+UX and AEO guidance: W3C WCAG 2.2 hover/focus and focus-visible, Material motion guidance, web.dev animation-performance recommendations, NN/g navigation patterns and Google Search Central AI Features.
+
+Remaining: second research pass, review of classification/citation quality, final client-approved page choice and proof, reviewed competitor reports, full PDF handover, comprehensive browser accessibility/performance QA.

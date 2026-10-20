@@ -50,3 +50,20 @@ Verified directly from the source archive:
 Not yet complete: permanent hosted transcript/screenshot storage and reviewed permissions, independently validated recommendation/citation coding, full per-tool ranked source-ledger tables, six finished comparator dossiers, final selected-page rewrite, Round 2 and final PDF package.
 
 The companion evidence export is delivered separately to the project owner; the public repository deliberately does not bundle internal collection files.
+
+
+## Phase 3 — evidence-driven competitor and source intelligence
+
+Implemented:
+- 15 leading supporting-citation domains per AI product (60 ranked rows) with distinct-answer counts and recorded URL counts; derived from the selected first-pass source archive.
+- Six competitor dossiers: Frazer Jones, Portfolio Payroll, Oakleaf Partnership, Middlemore, Hays and Robert Half, including buyer-situation charts, relevant captured public pages, role/geography fit, observed patterns, explicitly qualified interpretation and actions for JGA.
+- Citation ledger on Sources page; user can open the original 176-response JSON locally, filter source URLs by tool, question or URL/title, inspect exact links and export all filtered source events to CSV.
+- Editorial depth treatment: tonal layering, restrained raised cards, contextual contrast, stronger type hierarchy and selective shadow. Native page scrolling preserved.
+- Overview-only chapter-jump strip (horizontal proximity snapping, not whole-page forced scrolling) plus passive reading progress. Respects reduced-motion settings.
+- Browser-source code validated for syntax; no bundler required.
+
+Cautions:
+- The exact supporting-citation URLs and full responses are supplied with the separate client-safe evidence handover, not embedded in the public source repository.
+- The source event count is separate from unique-answer domain citation frequency. URLs may repeat or redirect.
+- Public competitor claims are not verified placement-performance outcomes. All attribution, classification, citation verification and explanations remain provisional until independent review.
+- The full study requires the second round, formal comparator editorial review, and final chosen-page blueprint before delivery as completed work.

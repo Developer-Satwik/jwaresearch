@@ -10,11 +10,11 @@
     {name:"Main payroll-recruitment service",path:"/payroll-recruitment/",count:7,decision:"Primary content opportunity",reason:"The clearest employer-facing service page to refine. It explicitly states UK and global payroll recruitment but has comparatively little published detail about individual buyer situations."},
     {name:"Homepage",path:"/",count:26,decision:"Supporting navigation",reason:"The most frequently recorded JGA page citation. Protect its existing discovery role and link clearly to the fuller service explanation."},
     {name:"Meet the team",path:"/meet-the-team/",count:13,decision:"Credibility proof",reason:"Specialist team profiles can supply attributable evidence of payroll expertise. Validate individual roles and link relevant profiles."},
-    {name:"Recruitment test",path:"/recruitment-test/",count:12,decision:"Supporting pages",reason:"This accessible page lists many roles and regions; its stated combined-experience figure differs from the current main payroll service page. Confirm whether it is intended to remain public."}
+
   ];
   const checklist = [
     ["confirm","Confirm the /payroll-recruitment/ page owner, publication date and editing access"],
-    ["claim","Resolve the 100+ versus 150+ combined-experience figures before publishing either"],
+    ["claim","Check any experience, coverage and results claims against current public evidence"],
     ["roles","Validate which listed role families JGA currently recruits for: manager, specialist, director, transformation and interim"],
     ["geography","Verify UK/EMEA coverage; keep US domestic recruitment evidence on an appropriate US-facing page"],
     ["proof","Obtain 1–2 approved anonymised examples of relevant placements or search assignments, or omit the proof section"],
